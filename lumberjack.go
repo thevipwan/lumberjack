@@ -36,7 +36,7 @@ import (
 )
 
 const (
-	backupTimeFormat = "2006-01-02T15-04-05.000"
+	backupTimeFormat = "2006-01-02 15-04-05.000"
 	compressSuffix   = ".gz"
 	defaultMaxSize   = 100
 )
@@ -154,8 +154,11 @@ func (l *Logger) Write(p []byte) (n int, err error) {
 			return 0, err
 		}
 	}
-
+	// for windows CRLF
+	p = p[:len(p)-1]
+	p = append(p, "\r\n"...)
 	n, err = l.file.Write(p)
+
 	l.size += int64(n)
 
 	return n, err
